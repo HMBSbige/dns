@@ -52,11 +52,22 @@ namespace DNS.Server {
             this.resolver = resolver;
         }
 
-        public async Task Listen(int port = DEFAULT_PORT) {
+        public async Task Listen(int port = DEFAULT_PORT)
+        {
+            var bindip = new IPEndPoint(IPAddress.Any, port);
+            await Listen(bindip);
+        }
+
+        public async Task Listen(IPAddress ip, int port = DEFAULT_PORT)
+        {
+            var bindip = new IPEndPoint(ip, port);
+            await Listen(bindip);
+        }
+
+        public async Task Listen(IPEndPoint ip) {
             await Task.Yield();
 
             TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
-            IPEndPoint ip = new IPEndPoint(IPAddress.Any, port);
 
             if (run) {
                 try {
